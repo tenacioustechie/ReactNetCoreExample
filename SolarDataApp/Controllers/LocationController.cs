@@ -16,12 +16,15 @@ namespace SolarDataApp.Controllers
 
         public LocationController()
         {
-            _locations = new List<LocationModel>() { new LocationModel() { Id = 1, Name = "Wilga" } };
+            _locations = new List<LocationModel>() {
+                new LocationModel() { Id = 1, Name = "Wilga" },
+                new LocationModel() { Id = 2, Name = "Dent" }
+            };
         }
 
         // GET: api/Location
         [HttpGet]
-        public async Task<IEnumerable<LocationModel>> Get()
+        public IEnumerable<LocationModel> Get()
         {
             return _locations;
         }
