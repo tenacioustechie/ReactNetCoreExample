@@ -1,18 +1,54 @@
 import React, { Component } from 'react';
+import { LocationEdit } from './LocationEdit';
 
 export class ManageLocations extends Component {
   static displayName = ManageLocations.name;
+  // TODO: don't hard code this
+  url = "/api/Location";
+  submitUrl = "/api/Location";
 
   constructor (props) {
     super(props);
+    this.handleLocationEditSubmit = this.handleLocationEditSubmit.bind(this);
     this.state = { locations: [], loading: true };
+  }
+  componentDidMount() {
+    this.loadLocationsFromServer();
+  }
 
-    fetch('api/Location')
+  loadLocationsFromServer() {
+    console.log( "get url: " + this.url);
+    fetch( this.url)
       .then(response => response.json())
         .then(data => {
           console.log(data);
-        this.setState({ locations: data, loading: false });
-      });
+          this.setState({ locations: data, loading: false });
+          });
+  }
+
+  handleLocationEditSubmit(location) {
+    // TODO: submit to the server and refresh the list
+    const data = new FormData();
+    data.append('Id', 0);
+    data.append('Name', location.Name);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('post', this.submitUrl, true);
+    xhr.onload = () => this.loadLocationsFromServer();
+    xhr.send(data);
+
+    fetch( this.submitUrl, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( location)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        });
   }
 
   static renderLocationsTable (locations) {
@@ -48,6 +84,7 @@ export class ManageLocations extends Component {
         <h1>Locations</h1>
         <p>These are the locations in the app.</p>
         {contents}
+        <LocationEdit onLocationEditSubmit={this.handleLocationEditSubmit} />
       </div>
     );
   }

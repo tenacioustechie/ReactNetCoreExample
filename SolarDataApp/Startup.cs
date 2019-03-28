@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SolarDataApp.DataAccess;
+using SolarDataApp.Helpers;
 
 namespace SolarDataApp
 {
@@ -20,6 +22,10 @@ namespace SolarDataApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConfigProvider, ConfigProvider>();
+            services.AddSingleton<IDataAccessHelper, DataAccessHelper>();
+            services.AddSingleton<ILocationRepository, LocationRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory

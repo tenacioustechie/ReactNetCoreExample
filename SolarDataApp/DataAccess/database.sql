@@ -6,8 +6,8 @@ use SolarDataApp;
 -- grant all on SolarDataApp.* to 'SolarDataApp'@'%' identified by 'crappyPassword79';
 
 /*
-drop table if exists Locations;
 drop table if exists Readings;
+drop table if exists Locations;
 -- */
 
 -- drop table Locations;
@@ -31,4 +31,11 @@ CREATE TABLE IF NOT EXISTS Readings (
   foreign key (LocationId) references Locations( Id),
   index IxReadings_Day (Day)
 );
+
+
+Insert Into Locations (Name) values ("Wilga") on duplicate key update Name = Name;
+set @locationId = LAST_INSERT_ID();
+Insert Into Readings (LocationId, Day, SolarGenerated, PowerUsed) values ( @locationId, DATE_ADD( NOW(), Interval -1 Day ), 34.1, 18.7);
+Insert Into Readings (LocationId, Day, SolarGenerated, PowerUsed) values ( @locationId, DATE_ADD( NOW(), Interval -2 Day ), 37.5, 18.9);
+Insert Into Readings (LocationId, Day, SolarGenerated, PowerUsed) values ( @locationId, DATE_ADD( NOW(), Interval -3 Day ), 22.3, 17.2);
 
