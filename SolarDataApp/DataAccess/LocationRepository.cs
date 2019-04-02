@@ -73,17 +73,17 @@ namespace SolarDataApp.DataAccess
             }
         }
 
-        public async Task<LocationModel> CreateLocation(LocationModel batch)
+        public async Task<LocationModel> CreateLocation(LocationModel location)
         {
             using (var connection = _dataAccessHelper.CreateConnection()) {
                 await connection.OpenAsync();
                 const string sql = "insert into Locations ( Name) values (@Name); Select LAST_INSERT_ID();";
                 var parameters = new DynamicParameters();
-                parameters.Add("@Name", batch.Name);
+                parameters.Add("@Name", location.Name);
                 var result = await connection.ExecuteScalarAsync(sql, parameters);
                 var id = Convert.ToInt32(result);
-                var batchFromDb = await GetLocation(id);
-                return batchFromDb;
+                var locationFromDb = await GetLocation(id);
+                return locationFromDb;
             }
         }
     }

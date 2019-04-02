@@ -8,6 +8,13 @@ using Xunit;
 
 namespace SolarDataApp.Tests.DataAccess
 {
+    /// <summary>
+    /// NOTE: these tests are a little to interdepenedent, they should be more
+    /// isolated than they are, but given they are actually testing against a real
+    /// database, they will achieve the purpose of checking all individual
+    /// calls work. 
+    /// </summary>
+    
     public class LocationRepositoryTests
     {
         [Fact]

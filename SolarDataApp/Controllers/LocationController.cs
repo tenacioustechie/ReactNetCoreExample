@@ -13,16 +13,11 @@ namespace SolarDataApp.Controllers
     [ApiController]
     public class LocationController : ControllerBase
     {
-        private List<LocationModel> _locations;
-        private ILocationRepository _locationRepository;
+        private readonly ILocationRepository _locationRepository;
 
         public LocationController( ILocationRepository locationRepository)
         {
             _locationRepository = locationRepository;
-            //_locations = new List<LocationModel>() {
-            //    new LocationModel() { Id = 1, Name = "Wilga" },
-            //    new LocationModel() { Id = 2, Name = "Dent" }
-            //};
         }
 
         // GET: api/Location
