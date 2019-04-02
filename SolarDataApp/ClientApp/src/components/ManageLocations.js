@@ -6,10 +6,12 @@ export class ManageLocations extends Component {
   // TODO: don't hard code this
   url = "/api/Location";
   submitUrl = "/api/Location";
+  showLocationEdit = false;
 
   constructor (props) {
     super(props);
     this.handleLocationEditSubmit = this.handleLocationEditSubmit.bind(this);
+    this.handleNewLocationClick = this.handleNewLocationClick.bind(this);
     this.state = { locations: [], loading: true };
   }
   componentDidMount() {
@@ -24,6 +26,10 @@ export class ManageLocations extends Component {
           console.log(data);
           this.setState({ locations: data, loading: false });
           });
+  }
+
+  handleNewLocationClick() {
+    console.log("New Location Click");
   }
 
   handleLocationEditSubmit(location) {
@@ -84,7 +90,8 @@ export class ManageLocations extends Component {
         <h1>Locations</h1>
         <p>These are the locations in the app.</p>
         {contents}
-        <LocationEdit onLocationEditSubmit={this.handleLocationEditSubmit} />
+        <input type="button" onClick={this.handleNewLocationClick} value="+" />
+        <LocationEdit onLocationEditSubmit={this.handleLocationEditSubmit} hidden={!this.showLocationEdit} />
       </div>
     );
   }
