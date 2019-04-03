@@ -3,7 +3,9 @@ import React from 'react';
 export class LocationEdit extends React.Component {
     constructor( props) {
         super(props);
-        this.state = { id: 0, name: '' };
+        console.log('Location Edit');
+        console.log( props);
+        this.state = {id: 0, name: props.location.name};
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }

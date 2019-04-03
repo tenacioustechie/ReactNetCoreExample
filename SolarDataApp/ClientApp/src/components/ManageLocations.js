@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { LocationEdit } from './LocationEdit';
+import { LocationRow } from './LocationRow';
 
 export class ManageLocations extends Component {
   static displayName = ManageLocations.name;
@@ -12,7 +13,8 @@ export class ManageLocations extends Component {
     super(props);
     this.handleLocationEditSubmit = this.handleLocationEditSubmit.bind(this);
     this.handleNewLocationClick = this.handleNewLocationClick.bind(this);
-    this.state = { locations: [], loading: true };
+    // this.handleEditClick = this.handleEditClick.bind(this);
+    this.state = { locations: [], loading: true, editing: false, locationEditing: null };
   }
   componentDidMount() {
     this.loadLocationsFromServer();
@@ -24,24 +26,34 @@ export class ManageLocations extends Component {
       .then(response => response.json())
         .then(data => {
           console.log(data);
-          this.setState({ locations: data, loading: false });
+          this.setState({ locations: data, loading: false, editing: this.state.editing, locationEditing: this.state.locationEditing });
+          console.log( "editing " + this.state.editing);
           });
   }
 
   handleNewLocationClick() {
     console.log("New Location Click");
+    console.log( "editing " + this.state.editing);
+    this.setState({ locations: this.state.locations, loading: this.state.loading, editing: true, locationEditing: { id: 0, name: 'New Location'} });
+    console.log( "editing " + this.state.editing);
+  }
+
+  handleEditClick( location) {
+    console.log('Editing click ManageLocations component');
+    console.log( location);
+    this.setState({ locations: this.state.locations, loading: this.state.loading, editing: true, locationEditing: location });
   }
 
   handleLocationEditSubmit(location) {
     // TODO: submit to the server and refresh the list
-    const data = new FormData();
-    data.append('Id', 0);
-    data.append('Name', location.Name);
+    //const data = new FormData();
+    //data.append('Id', 0);
+    //data.append('Name', location.Name);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', this.submitUrl, true);
-    xhr.onload = () => this.loadLocationsFromServer();
-    xhr.send(data);
+    //const xhr = new XMLHttpRequest();
+    //xhr.open('post', this.submitUrl, true);
+    //xhr.onload = () => this.loadLocationsFromServer();
+    //xhr.send(data);
 
     fetch( this.submitUrl, {
         method: 'POST',
@@ -53,11 +65,14 @@ export class ManageLocations extends Component {
       })
       .then(response => response.json())
       .then(data => {
+        console.log( 'submit edit location response: ' + data);
         console.log(data);
+        this.loadLocationsFromServer();
+        this.setState({ locations: this.state.locations, loading: this.state.loading, editing: false, locationEditing: null });
         });
   }
 
-  static renderLocationsTable (locations) {
+  renderLocationsTable (locations) {
     return (
       <table className='table table-striped'>
         <thead>
@@ -69,11 +84,7 @@ export class ManageLocations extends Component {
         </thead>
         <tbody>
           {locations.map(location =>
-                    <tr key={location.id}>
-                        <td>{location.id}</td>
-                        <td>{location.name}</td>
-                        <td></td>
-            </tr>
+            <LocationRow key={location.id} location={location} onEditClick={() => this.handleEditClick( location)} />
           )}
         </tbody>
       </table>
@@ -83,7 +94,11 @@ export class ManageLocations extends Component {
   render () {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-        : ManageLocations.renderLocationsTable(this.state.locations);
+        : this.renderLocationsTable(this.state.locations);
+
+    let editcontents = this.state.editing
+      ? <LocationEdit onLocationEditSubmit={this.handleLocationEditSubmit} location={this.state.locationEditing} />
+        : <span></span>
 
     return (
       <div>
@@ -91,7 +106,7 @@ export class ManageLocations extends Component {
         <p>These are the locations in the app.</p>
         {contents}
         <input type="button" onClick={this.handleNewLocationClick} value="+" />
-        <LocationEdit onLocationEditSubmit={this.handleLocationEditSubmit} hidden={!this.showLocationEdit} />
+        {editcontents}
       </div>
     );
   }
