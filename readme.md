@@ -17,14 +17,14 @@ create database SolarDataApp;
 grant all on SolarDataApp.* to 'SolarDataApp'@'%' identified by 'somePasswordToChange';
 ```
 
-Then run this script to create the required database structure and initial data. 
-```
-{{SolarDataApp/DataAccess/database.sql}}
-```
+Then run this [database script](SolarDataApp/DataAccess/database.sql) to create the required database structure and initial data. 
 
 You will need to update the appsettings.json in both C# Projects file with a valid config file. 
+
 `"DatabaseConnString": "Server=localhost;Database=SolarDataApp;Uid=SolarDataApp;Pwd=somePasswordToChange;SslMode=Preferred;",`
+
 Or you can use secrets storage to store the config in a file located in: 
+
 `%APPDATA%\Microsoft\UserSecrets\24fa0558-e29e-49af-b4f7-3e1687c405f8\secrets.json`
 
 # Build
@@ -50,7 +50,8 @@ There are no tests in the React client side app right now.
 You can open the server side code in Visual Studio, however the client React app is a little clunky to edit as VS tries to reformat it. So you are better of editing the client side app in Visual Studio Code. 
 
 There are more references in [Create React App Readme](SolarDataApp/ClientApp/README.md) 
-This project was created using the ASP.Net core template creation process as per https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/react?view=aspnetcore-2.2&tabs=visual-studio
+This project was created using the ASP.Net core template creation process as per 
+* https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/react?view=aspnetcore-2.2&tabs=visual-studio
 More react documentation can be found at
 * https://reactjs.org/
 * https://reactjs.org/tutorial/tutorial.html
