@@ -5,7 +5,7 @@ export class LocationEdit extends React.Component {
         super(props);
         console.log('Location Edit');
         console.log( props);
-        this.state = {id: 0, name: props.location.name};
+        this.state = {id: props.location.id, name: props.location.name};
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -20,6 +20,7 @@ export class LocationEdit extends React.Component {
             return;
         }
         // TODO: send request to the server
+        console.log('updating location id: ' + id);
         this.props.onLocationEditSubmit({ Id: id, Name: name });
         // reset state to clear form
         this.setState({ id: 0, name: '' });

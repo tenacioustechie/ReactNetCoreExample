@@ -37,10 +37,23 @@ namespace SolarDataApp.Controllers
 
         // POST: api/Location
         [HttpPost]
-        public async Task<LocationModel> Post([FromBody] LocationModel location)
+        public async Task<LocationModel> Post([FromBody] LocationModel locationIn)
         {
-            var locationFromDb = await _locationRepository.CreateLocation(location);
-            return locationFromDb;
+            var location = locationIn;
+            if (locationIn.Id > 0) {
+                // update the existing location
+                location = await _locationRepository.GetLocation(locationIn.Id);
+                if (location == null) {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                location.Name = locationIn.Name;
+                return await _locationRepository.UpdateLocation(location);
+            }
+            else {
+                // create a new location
+                return await _locationRepository.CreateLocation(location);
+            }
         }
 
         // PUT: api/Location/5

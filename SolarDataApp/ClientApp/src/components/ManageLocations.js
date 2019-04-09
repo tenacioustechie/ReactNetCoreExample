@@ -22,6 +22,7 @@ export class ManageLocations extends Component {
 
   loadLocationsFromServer() {
     console.log( "get url: " + this.url);
+    this.setState({ locations: this.state.locations, loading: true, editing: this.state.editing, locationEditing: this.state.locationEditing });
     fetch( this.url)
       .then(response => response.json())
         .then(data => {
@@ -54,6 +55,7 @@ export class ManageLocations extends Component {
     //xhr.open('post', this.submitUrl, true);
     //xhr.onload = () => this.loadLocationsFromServer();
     //xhr.send(data);
+    console.log( 'saving location... ', location);
 
     fetch( this.submitUrl, {
         method: 'POST',
@@ -65,10 +67,10 @@ export class ManageLocations extends Component {
       })
       .then(response => response.json())
       .then(data => {
-        console.log( 'submit edit location response: ' + data);
+        console.log( 'submit edit location response: ', data);
         console.log(data);
-        this.loadLocationsFromServer();
         this.setState({ locations: this.state.locations, loading: this.state.loading, editing: false, locationEditing: null });
+        this.loadLocationsFromServer();
         });
   }
 

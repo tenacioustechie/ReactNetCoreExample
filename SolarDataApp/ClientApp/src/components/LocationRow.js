@@ -4,11 +4,11 @@ export class LocationRow extends Component {
 
     constructor( props) {
         super(props);
-        this.state = props.location;
+        this.state = { location: props.location};
     }
 
     handleEditClick( location) {
-      console.log('Editing click');
+      console.log('Editing click asdfasdf');
       console.log( location);
       this.props.onEditClick(location);
     }
@@ -19,9 +19,9 @@ export class LocationRow extends Component {
             return null;
         }
         return (
-            <tr key={this.state.id}>
-                <td>{this.state.id}</td>
-                <td>{this.state.name}</td>
+            <tr key={this.state.location.id}>
+                <td>{this.state.location.id}</td>
+                <td>{this.state.location.name}</td>
                 <td><a onClick={() => this.props.onEditClick(this.state)}>edit</a></td>
             </tr>
         );
