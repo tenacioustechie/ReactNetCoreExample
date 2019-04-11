@@ -45,6 +45,16 @@ export class ManageLocations extends Component {
     this.setState({ locations: this.state.locations, loading: this.state.loading, editing: true, locationEditing: location });
   }
 
+  handleDeleteClick( location) {
+    console.log('Delete Location ', location);
+    const requestOptions = { method: 'DELETE' };
+    fetch( this.url + '/' + location.id, requestOptions)
+        .then(data => {
+          console.log(data);
+          this.loadLocationsFromServer();
+          });
+  }
+
   handleLocationEditSubmit(location) {
     // TODO: submit to the server and refresh the list
     //const data = new FormData();
@@ -86,7 +96,9 @@ export class ManageLocations extends Component {
         </thead>
         <tbody>
           {locations.map(location =>
-            <LocationRow key={location.id} location={location} onEditClick={() => this.handleEditClick( location)} />
+            <LocationRow key={location.id} location={location} 
+                onEditClick={() => this.handleEditClick( location)} 
+                onDeleteClick={() => this.handleDeleteClick( location)} />
           )}
         </tbody>
       </table>

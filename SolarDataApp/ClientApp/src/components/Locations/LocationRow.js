@@ -22,7 +22,10 @@ export class LocationRow extends Component {
             <tr key={this.state.location.id}>
                 <td>{this.state.location.id}</td>
                 <td>{this.state.location.name}</td>
-                <td><a onClick={() => this.props.onEditClick(this.state)}>edit</a></td>
+                <td>
+                    <a onClick={() => this.props.onEditClick(this.state)} style={{cursor: 'pointer'}}>edit</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a onClick={() => this.props.onDeleteClick(this.state)} style={{cursor: 'pointer'}}>delete</a>
+                </td>
             </tr>
         );
     }

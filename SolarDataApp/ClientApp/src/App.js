@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { ManageLocations } from './components/ManageLocations'
-import { Counter } from './components/Counter';
+import { ManageLocations } from './components/Locations/ManageLocations'
+import { PowerReadings } from './components/Readings/PowerReadings';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -13,8 +12,7 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
+        <Route path='/readings' component={PowerReadings} />
         <Route path='/locations' component={ManageLocations} />
       </Layout>
     );

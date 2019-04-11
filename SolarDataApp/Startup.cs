@@ -25,6 +25,7 @@ namespace SolarDataApp
             services.AddSingleton<IConfigProvider, ConfigProvider>();
             services.AddSingleton<IDataAccessHelper, DataAccessHelper>();
             services.AddSingleton<ILocationRepository, LocationRepository>();
+            services.AddSingleton<IReadingRepository, ReadingRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
