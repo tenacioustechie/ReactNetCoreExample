@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Configuration.Json;
 using SolarDataApp.Helpers;
 
 namespace SolarDataApp.Tests
@@ -13,7 +13,7 @@ namespace SolarDataApp.Tests
         {
             return new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true)
-                //    .AddUserSecrets("e3dfcccf-0cb3-423a-b302-e3e92e95c128")
+                .AddUserSecrets("24fa0558-e29e-49af-b4f7-3e1687c405f8")
                 //    .AddEnvironmentVariables()
                 .Build();
         }
