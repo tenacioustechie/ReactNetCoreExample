@@ -47,11 +47,11 @@ export class PowerReadings extends Component {
             .then(response => response.json())
               .then(data => {
                 console.log("loaded readings", data);
-                this.setState(prevState => ({ ...prevState, loadingReadings: false,  readings: data }));
+                this.setState(prevState => ({ loadingReadings: false,  readings: data }));
               });
         } else {
           console.log("location empty, can't load readings");
-          this.setState(prevState => ({ ...prevState, loadingReadings: false,  readings: [] }));
+          this.setState(prevState => ({ loadingReadings: false,  readings: [] }));
         }
     }
     updateLocation(newValue) {
@@ -60,6 +60,8 @@ export class PowerReadings extends Component {
         ...prevState,
         locationId: newValue
       }), () => {
+        //var location = this.state.locations.find( n => n.id = this.state.locationId);
+        //history.pushState({}, "Updating Readings for " + location.name, "/readings/" + this.state.locationId);
         // NOTE: as setState is asyncronous, this callback occurs after it has updated state
         this.loadReadingsFromServer();
       });
@@ -74,20 +76,38 @@ export class PowerReadings extends Component {
     }
     handleDeleteClick( reading) {
       console.log('Delete reading click', reading);
-      // TODO: Make API call to delete reading
-      this.setState(prevState => ({
-        editing: false,
-        reading: null
-      }));
+      const requestOptions = { method: 'DELETE' };
+      fetch( this.url + '/' + reading.id, requestOptions)
+          .then(data => {
+            console.log("deleted reading: ", data);
+            this.setState(prevState => ({
+              editing: false,
+              reading: null
+            }), () => {
+              this.loadReadingsFromServer();
+            });
+          });
     }
     onSaveClick() {
-      console.log('On Save Click');
-      // TODO: Make save API call
-      // TODO: update state
-      this.setState(prevState => ({
-        editing: false,
-        reading: null
-      }));
+      console.log('On Save Click', this.state.reading);
+      var fetchUrl = (this.state.reading.id > 0) ? (this.url +'/' + this.state.reading.id) : this.url;
+      var method = this.state.reading.id > 0 ? "PUT" : "POST";
+      var requestOptions = { 
+        method: method,
+        body: JSON.stringify( this.state.reading),
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+      };
+      fetch( fetchUrl, requestOptions)
+          .then(data => {
+            console.log("saving reading: ", data);
+            this.setState(prevState => ({
+              editing: false,
+              reading: null
+            }), () => {
+              console.log("re loading readings");
+              this.loadReadingsFromServer();
+            });
+          });
     }
     onCancelClick() {
       console.log('On Cancel Click');
@@ -109,14 +129,34 @@ export class PowerReadings extends Component {
         }
       }));
     }
+    handleChangeSolarGenerated(e) {
+      const newValue = e.target.value;
+      this.setState( (prevState) => ({
+        reading: { ...prevState.reading, solarGenerated: newValue }
+      }));
+    }
+    handleChangePowerUsed(e) {
+      const newValue = e.target.value;
+      this.setState( (prevState) => ({
+        reading: { ...prevState.reading, powerUsed: newValue }
+      }));
+    }
+    handleChangeDate(e) {
+      const newValue = e.target.value;
+      console.log( "updated date ", newValue);
+      this.setState( (prevState) => ({
+        reading: { ...prevState.reading, day: (new Date(newValue)).toISOString() }
+      }));
+    }
 
     renderAddRow() {
       if ( this.state.editing ) {
+        console.log("Editing Reading Row ", this.state.reading);
         return (
           <tr>
-            <th><input type="date" defaultValue={new Date(this.state.reading.day).toISOString().split("T")[0]} /></th>
-            <th><input type="number" defaultValue={this.state.reading.powerUsed} /> kWh</th>
-            <th><input type="number" defaultValue={this.state.reading.solarGenerated} /> kWh</th>
+            <th><input type="date" defaultValue={new Date(this.state.reading.day).toISOString().split("T")[0]} onChange={(e) => this.handleChangeDate(e)} /></th>
+            <th><input type="number" defaultValue={this.state.reading.powerUsed} onChange={(e) => this.handleChangePowerUsed(e)} /> kWh</th>
+            <th><input type="number" defaultValue={this.state.reading.solarGenerated} onChange={(e) => this.handleChangeSolarGenerated(e)} /> kWh</th>
             <th>
                 <button onClick={() => this.onSaveClick()} style={{cursor: 'pointer'}}>save</button> &nbsp;&nbsp;
                 <button onClick={() => this.onCancelClick()} style={{cursor: 'pointer'}}>cancel</button>

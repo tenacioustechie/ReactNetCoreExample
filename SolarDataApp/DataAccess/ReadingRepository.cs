@@ -84,9 +84,10 @@ namespace SolarDataApp.DataAccess
         {
             using (var connection = _dataAccessHelper.CreateConnection()) {
                 await connection.OpenAsync();
-                const string sql = "update Readings set SolarGenerated = @SolarGenerated, PowerUsed = @PowerUsed where Id = @Id; select * from Readings where Id = @Id";
+                const string sql = "update Readings set Day = @Day, SolarGenerated = @SolarGenerated, PowerUsed = @PowerUsed where Id = @Id; select * from Readings where Id = @Id";
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", reading.Id);
+                parameters.Add("@Day", reading.Day);
                 parameters.Add("@PowerUsed", reading.PowerUsed);
                 parameters.Add("@SolarGenerated", reading.SolarGenerated);
                 var readingFromDb = await connection.QuerySingleOrDefaultAsync<ReadingModel>(sql, parameters);
